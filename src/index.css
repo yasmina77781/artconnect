@@ -1,1 +1,5 @@
-@import "tailwindcss";
+.container {
+  max-width: 1200px; /* Adjust this value to match your banner's width */
+  margin: 20px 20px 20px 70px; /* This centers the container horizontally */
+  padding: 0 20px; /* Optional: adds a small space on the sides on mobile screens */
+}

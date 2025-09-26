@@ -1,159 +1,129 @@
-import React from 'react';
+import React from "react";
+import { Facebook, Instagram, Mail, Phone } from "lucide-react";
 
 const Footer = () => {
   const footerStyle = {
-    background: 'linear-gradient(to right, #93c5fd, #3b82f6)',
-    color: 'white',
-    paddingTop: '2rem',
-    paddingBottom: '2rem',
-    fontFamily: 'Arial, sans-serif'
+    background: "linear-gradient(to right, #1e3a8a, #3b82f6)", // navy → blue
+    color: "white",
+    padding: "3rem 1.5rem 2rem",
+    fontFamily: "Arial, sans-serif",
   };
 
   const containerStyle = {
-    maxWidth: '72rem',
-    margin: '0 auto',
-    padding: '0 1.5rem'
-  };
-
-  const taglineContainerStyle = {
-    textAlign: 'center',
-    marginBottom: '1.5rem'
-  };
-
-  const taglineStyle = {
-    fontSize: '1rem',
-    fontStyle: 'italic',
-    fontWeight: '300',
-    marginBottom: '0.25rem'
-  };
-
-  const brandStyle = {
-    fontSize: '1.75rem',
-    fontWeight: 'bold'
-  };
-
-  const sectionsContainerStyle = {
-    display: 'flex',
-    justifyContent: 'space-between',
-    flexWrap: 'wrap'
+    maxWidth: "1200px",
+    margin: "0 auto",
+    display: "flex",
+    flexWrap: "wrap",
+    justifyContent: "space-between",
+    gap: "2rem",
   };
 
   const sectionStyle = {
-    flex: '1 1 200px',
-    marginBottom: '1rem'
+    flex: "1 1 250px",
+    minWidth: "200px",
+  };
+
+  const brandStyle = {
+    fontSize: "1.8rem",
+    fontWeight: "bold",
+    marginBottom: "0.5rem",
+  };
+
+  const taglineStyle = {
+    fontSize: "1rem",
+    fontStyle: "italic",
+    opacity: 0.85,
+    marginBottom: "1rem",
   };
 
   const sectionTitleStyle = {
-    fontSize: '1.25rem',
-    fontWeight: '600',
-    marginBottom: '0.5rem'
-  };
-
-  const contactItemStyle = {
-    display: 'flex',
-    alignItems: 'center',
-    gap: '0.5rem',
-    marginBottom: '0.5rem'
-  };
-
-  const labelStyle = {
-    fontWeight: '500'
+    fontSize: "1.25rem",
+    fontWeight: "600",
+    marginBottom: "0.75rem",
   };
 
   const linkStyle = {
-    color: 'white',
-    textDecoration: 'none',
-    transition: 'all 0.3s ease'
+    color: "white",
+    textDecoration: "none",
+    display: "flex",
+    alignItems: "center",
+    gap: "0.5rem",
+    marginBottom: "0.5rem",
+    transition: "all 0.3s ease",
   };
 
-  const handleMouseEnter = (e) => {
-    e.target.style.textDecoration = 'underline';
-    e.target.style.color = '#dbeafe';
+  const linkHover = (e) => {
+    e.target.style.color = "#dbeafe";
   };
 
-  const handleMouseLeave = (e) => {
-    e.target.style.textDecoration = 'none';
-    e.target.style.color = 'white';
+  const linkLeave = (e) => {
+    e.target.style.color = "white";
   };
 
-  const copyrightContainerStyle = {
-    textAlign: 'center',
-    marginTop: '2rem',
-    paddingTop: '1rem',
-    borderTop: '1px solid rgba(147, 197, 253, 0.5)',
-    opacity: 0.75,
-    fontSize: '0.85rem'
+  const copyrightStyle = {
+    textAlign: "center",
+    marginTop: "2rem",
+    paddingTop: "1rem",
+    borderTop: "1px solid rgba(255,255,255,0.2)",
+    opacity: 0.7,
+    fontSize: "0.85rem",
   };
 
   return (
     <footer style={footerStyle}>
       <div style={containerStyle}>
-        {/* Tagline */}
-        <div style={taglineContainerStyle}>
-          <p style={taglineStyle}>Where traditions meet the digital world</p>
+        {/* Brand + Tagline */}
+        <div style={sectionStyle}>
           <h2 style={brandStyle}>ArtConnect Maroc</h2>
+          <p style={taglineStyle}>Where traditions meet the digital world</p>
         </div>
 
-        {/* Sections */}
-        <div style={sectionsContainerStyle}>
-          {/* Contact Left */}
-          <div style={{ ...sectionStyle, textAlign: 'left' }}>
-            <h3 style={sectionTitleStyle}>Contact us</h3>
-            <div>
-              <p style={contactItemStyle}>
-                <span style={labelStyle}>Number:</span>
-                <a
-                  href="tel:0678987655"
-                  style={linkStyle}
-                  onMouseEnter={handleMouseEnter}
-                  onMouseLeave={handleMouseLeave}
-                >
-                  0678987655
-                </a>
-              </p>
-              <p style={contactItemStyle}>
-                <span style={labelStyle}>Email:</span>
-                <a
-                  href="mailto:artconnectmaroc@gmail.com"
-                  style={linkStyle}
-                  onMouseEnter={handleMouseEnter}
-                  onMouseLeave={handleMouseLeave}
-                >
-                  artconnectmaroc@gmail.com
-                </a>
-              </p>
-            </div>
-          </div>
-
-          {/* Follow Us Right */}
-          <div style={{ ...sectionStyle, textAlign: 'right' }}>
-            <h3 style={sectionTitleStyle}>Follow us</h3>
-            <div>
-              <a
-                href="#"
-                style={linkStyle}
-                onMouseEnter={handleMouseEnter}
-                onMouseLeave={handleMouseLeave}
-              >
-                Facebook
-              </a>
-              <br />
-              <a
-                href="#"
-                style={linkStyle}
-                onMouseEnter={handleMouseEnter}
-                onMouseLeave={handleMouseLeave}
-              >
-                Instagram
-              </a>
-            </div>
-          </div>
+        {/* Contact */}
+        <div style={sectionStyle}>
+          <h3 style={sectionTitleStyle}>Contact us</h3>
+          <a
+            href="tel:0678987655"
+            style={linkStyle}
+            onMouseEnter={linkHover}
+            onMouseLeave={linkLeave}
+          >
+            <Phone size={18} /> 0678987655
+          </a>
+          <a
+            href="mailto:artconnectmaroc@gmail.com"
+            style={linkStyle}
+            onMouseEnter={linkHover}
+            onMouseLeave={linkLeave}
+          >
+            <Mail size={18} /> artconnectmaroc@gmail.com
+          </a>
         </div>
 
-        {/* Copyright */}
-        <div style={copyrightContainerStyle}>
-          <p>&copy; 2025 ArtConnect Maroc. Tous droits réservés.</p>
+        {/* Social Media */}
+        <div style={sectionStyle}>
+          <h3 style={sectionTitleStyle}>Follow us</h3>
+          <a
+            href="#"
+            style={linkStyle}
+            onMouseEnter={linkHover}
+            onMouseLeave={linkLeave}
+          >
+            <Facebook size={18} /> Facebook
+          </a>
+          <a
+            href="#"
+            style={linkStyle}
+            onMouseEnter={linkHover}
+            onMouseLeave={linkLeave}
+          >
+            <Instagram size={18} /> Instagram
+          </a>
         </div>
+      </div>
+
+      {/* Copyright */}
+      <div style={copyrightStyle}>
+        <p>&copy; 2025 ArtConnect Maroc. Tous droits réservés.</p>
       </div>
     </footer>
   );

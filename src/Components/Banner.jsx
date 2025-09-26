@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import React from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import mainBg from "../assets/arr.jpg";
 import morocco1 from "../assets/ses.jpg";

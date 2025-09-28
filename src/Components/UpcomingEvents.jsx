@@ -1,76 +1,110 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Calendar, MapPin, Users, Clock, ChevronLeft, ChevronRight, Heart } from 'lucide-react';
 import EVENTATLASEMELSHIL from '../assets/EVENTATLASEMELSHIL.jpg';
 import EVENTGNAWA from '../assets/EVENTGNAWA.jpg';
 import EVENTPAINTING from '../assets/EVENTPAINTING.jpg';
 import EVENTTARAB from '../assets/EVENTTARAB.jpg';
 import EVENT3AYTA from '../assets/EVENT3AYTA.jpg';
-const UpcomingEvents = () => {
+
+const UpcomingEvents = ({ selectedRegion, selectedCategory }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [likedEvents, setLikedEvents] = useState(new Set());
+  const navigate = useNavigate();
 
-  const events = [
+  const allEvents = [
     {
-      id: 1,
-      title: "Emelshil Marriages ",
+      id: 31,
+      title: "Emelshil Marriages",
       date: "2025-10-15",
       time: "08:00",
       location: "Atlas Mountains",
       attendees: 24,
       category: "Festival",
-      image:EVENTATLASEMELSHIL,
-      description: "Join us for an epic mountain hiking experience with breathtaking views"
+      image: EVENTATLASEMELSHIL,
+      description: "Join us for an epic mountain hiking experience with breathtaking views",
+      city: "Atlas Mountains",
+      component: "UpcomingEvents"
     },
     {
-      id: 2,
-      title: " Festival Gnawa",
+      id: 32,
+      title: "Festival Gnawa",
       date: "2025-10-20",
       time: "18:00",
       location: "Essaouira",
       attendees: 156,
       category: "Festival",
       image: EVENTGNAWA,
-      description: "Experience magical sunset vibes with live music and local food"
+      description: "Experience magical sunset vibes with live music and local food",
+      city: "Essaouira",
+      component: "UpcomingEvents"
     },
     {
-      id: 3,
-      title: "Painting Meusum",
+      id: 33,
+      title: "Painting Museum",
       date: "2025-10-25",
       time: "14:00",
       location: "Rabat",
       attendees: 18,
       category: "Art",
       image: EVENTPAINTING,
-      description: "Capture the essence of city life with fellow photography enthusiasts"
+      description: "Capture the essence of city life with fellow photography enthusiasts",
+      city: "Rabat",
+      component: "UpcomingEvents"
     },
     {
-      id: 4,
-      title: " Tarab Alandalousi",
+      id: 34,
+      title: "Tarab Alandalousi",
       date: "2025-11-02",
       time: "16:00",
-      location: "Fés",
+      location: "Fes",
       attendees: 12,
-      category: "Cerimony",
+      category: "Ceremony",
       image: EVENTTARAB,
-      description: "Disconnect from the world in a peaceful mountain cabin setting"
+      description: "Disconnect from the world in a peaceful mountain cabin setting",
+      city: "Fes",
+      component: "UpcomingEvents"
     },
     {
-      id: 5,
+      id: 35,
       title: "Aayta Night",
       date: "2025-11-08",
       time: "20:00",
       location: "Casablanca",
       attendees: 35,
       category: "Festival",
-      image:EVENT3AYTA,
-      description: "Marvel at the cosmos under the clearest desert skies"
+      image: EVENT3AYTA,
+      description: "Marvel at the cosmos under the clearest desert skies",
+      city: "Casablanca",
+      component: "UpcomingEvents"
     }
   ];
+
+  // Filter events based on selected region and category
+  const filteredEvents = allEvents.filter(event => {
+    const regionMatch = selectedRegion === "All Morocco" || 
+                       event.city.toLowerCase().includes(selectedRegion.toLowerCase()) ||
+                       selectedRegion.toLowerCase().includes(event.city.toLowerCase()) ||
+                       event.location.toLowerCase().includes(selectedRegion.toLowerCase());
+    
+    const categoryMatch = selectedCategory === "All Categories" || 
+                         event.category.toLowerCase() === selectedCategory.toLowerCase();
+    
+    return regionMatch && categoryMatch;
+  });
+  
+  const events = filteredEvents;
 
   const nextSlide = () => setCurrentIndex((prev) => (prev + 1) % events.length);
   const prevSlide = () => setCurrentIndex((prev) => (prev - 1 + events.length) % events.length);
 
-  const toggleLike = (eventId) => {
+  // Reset current index when filters change
+  useEffect(() => {
+    setCurrentIndex(0);
+  }, [selectedRegion, selectedCategory]);
+
+  const toggleLike = (eventId, e) => {
+    e.stopPropagation();
     setLikedEvents(prev => {
       const newLiked = new Set(prev);
       if (newLiked.has(eventId)) {
@@ -80,6 +114,10 @@ const UpcomingEvents = () => {
       }
       return newLiked;
     });
+  };
+
+  const handleCardClick = (event) => {
+    navigate(`/details/${event.id}`, { state: { component: event.component } });
   };
 
   const formatDate = (dateStr) => {
@@ -95,8 +133,8 @@ const UpcomingEvents = () => {
     const colors = {
       'Adventure': '#10b981',
       'Festival': '#8b5cf6',
-      'Photography': '#3b82f6',
-      'Retreat': '#f59e0b',
+      'Art': '#3b82f6',
+      'Ceremony': '#f59e0b',
       'Astronomy': '#6366f1'
     };
     return colors[category] || '#6b7280';
@@ -104,22 +142,27 @@ const UpcomingEvents = () => {
 
   const getVisibleEvents = () => {
     const visible = [];
+    if (events.length === 0) return visible;
     for (let i = 0; i < 3; i++) {
       const index = (currentIndex + i) % events.length;
-      visible.push({
-        ...events[index],
-        position: i
-      });
+      if (events[index]) {
+        visible.push({
+          ...events[index],
+          position: i
+        });
+      }
     }
     return visible;
   };
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      nextSlide();
-    }, 5000);
-    return () => clearInterval(interval);
-  }, []);
+    if (events.length > 0) {
+        const interval = setInterval(() => {
+        nextSlide();
+        }, 5000);
+        return () => clearInterval(interval);
+    }
+  }, [events.length]);
 
   const containerStyle = {
     minHeight: '100vh',
@@ -290,35 +333,40 @@ const UpcomingEvents = () => {
     color: 'white'
   });
 
+  if (events.length === 0) {
+    return (
+      <div style={{ padding: '2rem', textAlign: 'center' }}>
+        <h2 style={{ fontSize: '2rem', fontFamily: "'Abril Fatface', serif", color: 'black' }}>
+          Upcoming Events
+        </h2>
+        <p style={{ color: 'black' }}>No events found matching your filter criteria.</p>
+      </div>
+    );
+  }
+
   return (
     <div style={containerStyle}>
       <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-        {/* Header */}
         <div style={headerStyle}>
-          <h1 style={titleStyle}>Upcoming Events</h1>
+          <h1 style={titleStyle}>
+            Upcoming Events {filteredEvents.length !== allEvents.length && `(${filteredEvents.length} events)`}
+          </h1>
         </div>
 
-        {/* Carousel */}
         <div style={carouselStyle}>
           <div style={cardsContainerStyle}>
             {getVisibleEvents().map((event, index) => (
               <div
                 key={`${event.id}-${currentIndex}`}
                 style={getCardStyle(event.position)}
-                onClick={() => {
-                  if (event.position === 0) prevSlide();
-                  else if (event.position === 2) nextSlide();
-                }}
+                onClick={() => handleCardClick(event)}
               >
                 <div style={backgroundStyle(event.image)}></div>
                 <div style={overlayStyle}></div>
 
                 <button
                   style={likeBtnStyle}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    toggleLike(event.id);
-                  }}
+                  onClick={(e) => toggleLike(event.id, e)}
                 >
                   <Heart
                     size={20}
@@ -358,7 +406,6 @@ const UpcomingEvents = () => {
             ))}
           </div>
 
-          {/* Prev/Next Buttons replacing dots */}
           <button style={navBtnStyle('left')} onClick={prevSlide}>
             <ChevronLeft size={24} />
           </button>

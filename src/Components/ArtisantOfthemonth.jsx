@@ -1,7 +1,25 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import ARTISTTITRIT from "../assets/ARTISTTITRIT.jpg";
 
 const ArtisanOfTheMonth = () => {
+  const navigate = useNavigate();
+  
+  const artisan = {
+    id: 41,
+    name: "Titrit Amghar",
+    title: "Designer of Modern Amazigh Attire",
+    description: "Titrit Amghar, a young artisan passionate about preserving Amazigh heritage. She reimagines traditional Amazigh clothing with a modern touch, blending ancestral motifs with contemporary cuts to create unique fashion pieces. Her work celebrates identity while making it accessible to new generations.",
+    image: ARTISTTITRIT,
+    city: "Atlas Mountains",
+    category: "Art",
+    component: "ArtisanOfTheMonth"
+  };
+
+  const handleClick = () => {
+    navigate(`/details/${artisan.id}`, { state: { component: artisan.component } });
+  };
+
   const containerStyle = {
     maxWidth: '64rem',
     margin: '0 auto',
@@ -11,8 +29,8 @@ const ArtisanOfTheMonth = () => {
   const titleStyle = {
     fontSize: '2rem',
     fontWeight: 'bold',
-    textAlign: 'left', // changed from center to left
-    fontFamily:'Abril Fatface, serif',
+    textAlign: 'left',
+    fontFamily: 'Abril Fatface, serif',
     marginBottom: '2rem',
     color: 'black'
   };
@@ -21,7 +39,9 @@ const ArtisanOfTheMonth = () => {
     background: 'linear-gradient(to right, #93c5fd, #3b82f6)',
     borderRadius: '1.5rem',
     padding: '1.5rem',
-    boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)'
+    boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
+    cursor: 'pointer',
+    transition: 'transform 0.3s ease',
   };
 
   const contentStyle = {
@@ -72,9 +92,13 @@ const ArtisanOfTheMonth = () => {
         Artisans of the Month
       </h1>
       
-      <div style={cardStyle}>
+      <div 
+        style={cardStyle} 
+        onClick={handleClick}
+        onMouseEnter={(e) => e.target.style.transform = 'scale(1.02)'}
+        onMouseLeave={(e) => e.target.style.transform = 'scale(1)'}
+      >
         <div style={contentStyle}>
-          {/* Image de l'artisan */}
           <div style={imageContainerStyle}>
             <img 
               src={ARTISTTITRIT} 
@@ -83,19 +107,15 @@ const ArtisanOfTheMonth = () => {
             />
           </div>
           
-          {/* Contenu texte */}
           <div style={textContainerStyle}>
             <h2 style={nameStyle}>
-              Titrit Amghar
+              {artisan.name}
             </h2>
             <h3 style={titleArtisanStyle}>
-              Designer of Modern Amazigh Attire
+              {artisan.title}
             </h3>
             <p style={descriptionStyle}>
-               Titrit Amghar, a young artisan passionate about preserving Amazigh heritage. 
-  She reimagines traditional Amazigh clothing with a modern touch, blending ancestral motifs 
-  with contemporary cuts to create unique fashion pieces. 
-  Her work celebrates identity while making it accessible to new generations.
+              {artisan.description}
             </p>
           </div>
         </div>

@@ -1,13 +1,13 @@
-import React, { useState } from "react";
+import React from "react";
 
 // Flatten the regions data into a single array of all cities
 const allCities = [
   "Tangier", "Tetouan", "Chefchaouen", "Casablanca", "Rabat",
   "Kenitra", "Agadir", "Laayoune", "Dakhla", "Oujda", "Nador",
-  "Berkane", "Marrakech", "Fes", "Meknes",
+  "Berkane", "Marrakech", "Fes", "Meknes", "Safi", "Essaouira"
 ];
 
-const categories = ["Pottery", "Carpets", "Jewelry", "Woodwork"];
+const categories = ["Pottery", "Carpets", "Jewelry", "Woodwork", "Zellige", "Festival", "Art", "Ceremony"];
 
 // Reusable FilterButton component for cleaner JSX
 const FilterButton = ({ text, onClick, isSelected, isReset = false }) => {
@@ -27,10 +27,12 @@ const FilterButton = ({ text, onClick, isSelected, isReset = false }) => {
   );
 };
 
-export default function Research() {
-  const [selectedRegion, setSelectedRegion] = useState("All Morocco");
-  const [selectedCategory, setSelectedCategory] = useState("All Categories");
-
+export default function Research({ 
+  selectedRegion, 
+  setSelectedRegion, 
+  selectedCategory, 
+  setSelectedCategory 
+}) {
   const handleReset = () => {
     setSelectedRegion("All Morocco");
     setSelectedCategory("All Categories");
@@ -41,7 +43,7 @@ export default function Research() {
     section: {
       width: "90%",
       fontFamily: "'Abril Fatface', serif",
-     margin: "90px 0px",
+      margin: "90px 0px",
     },
     headerContainer: {
       display: "flex",
@@ -49,7 +51,7 @@ export default function Research() {
       justifyContent: "space-between",
       flexWrap: "wrap",
       marginBottom: "10px",
-     margin: "10px 0px",
+      margin: "10px 0px",
     },
     title: {
       fontSize: "2rem",
@@ -91,7 +93,7 @@ export default function Research() {
             <option value="All Categories">ALL CATEGORIES</option>
             {categories.map((cat, i) => (
               <option key={i} value={cat}>
-                {cat}
+                {cat.toUpperCase()}
               </option>
             ))}
           </select>

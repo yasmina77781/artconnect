@@ -5,8 +5,7 @@ export default function ArtisanCards({ artisans, setArtisans }) {
   const [editArtisan, setEditArtisan] = useState(null);
 
   const handleDelete = async (id) => {
-    const confirmDelete = window.confirm("Supprimer cet artisan ?");
-    if (!confirmDelete) return;
+    if (!window.confirm("Supprimer cet artisan ?")) return;
 
     try {
       const res = await fetch(`http://localhost:3001/artisans/${id}`, {
@@ -42,20 +41,24 @@ export default function ArtisanCards({ artisans, setArtisans }) {
             {a.image && (
               <img
                 src={a.image}
-                alt={a.name}
+                alt={a.name || "Artisan"}
                 className="w-full h-48 object-cover"
                 onError={(e) => {
-                  e.target.src = "";
-                  e.target.alt = "Image failed to load";
-                  e.target.style.display = "none";
+                  e.target.src = "/placeholder.jpg";
                 }}
               />
             )}
 
             <div className="p-4 space-y-2">
-              <h3 className="text-xl font-semibold text-[#2781AB]">{a.name}</h3>
-              <p className="text-sm text-gray-700 italic">{a.region}</p>
-              <p className="text-gray-800">{a.description}</p>
+              <h3 className="text-xl font-semibold text-[#2781AB]">
+                {a.name || "Nom inconnu"}
+              </h3>
+              <p className="text-sm text-gray-700 italic">
+                {a.region || "Région inconnue"}
+              </p>
+              <p className="text-gray-800">
+                {a.description || "Aucune description disponible."}
+              </p>
 
               <div className="flex gap-2 mt-4">
                 <button

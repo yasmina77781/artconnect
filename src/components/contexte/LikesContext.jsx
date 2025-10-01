@@ -1,20 +1,22 @@
-import { createContext, useState } from "react";
+import { createContext, useState, useEffect } from "react";
 
 const LikesContext = createContext();
 
 export function LikesProvider({ children }) {
-  const [likedItems, setLikedItems] = useState(new Set());
+  const [likedItems, setLikedItems] = useState([]);
 
   const toggleLike = (id) => {
-    setLikedItems((prev) => {
-      const newSet = new Set(prev);
-      newSet.has(id) ? newSet.delete(id) : newSet.add(id);
-      return newSet;
-    });
+    setLikedItems((prev) =>
+      prev.includes(id)
+        ? prev.filter((itemId) => itemId !== id)
+        : [...prev, id]
+    );
   };
 
+  const likedSet = new Set(likedItems); // pour les .has(id)
+
   return (
-    <LikesContext.Provider value={{ likedItems, toggleLike }}>
+    <LikesContext.Provider value={{ likedItems: likedSet, toggleLike }}>
       {children}
     </LikesContext.Provider>
   );

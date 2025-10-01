@@ -1,11 +1,39 @@
 import { useState } from "react";
-import PublishForm from "../PublishForm"; // pour les modèles
-import FormArtisan from "./FormArtisan"; // à créer
+import PublishForm from "../PublishForm";
+import FormArtisan from "./FormArtisan";
 
 export default function AddMenu({ setModels, setArtisans }) {
   const [selectedType, setSelectedType] = useState(null);
 
   const handleCancel = () => setSelectedType(null);
+
+  const handleSubmit = async (type, data) => {
+    const enriched = {
+      ...data,
+      id: crypto.randomUUID(),
+      createdAt: Date.now(),
+    };
+
+    const endpoint = type === "modele" ? "artworks" : "artisans";
+    const setter = type === "modele" ? setModels : setArtisans;
+
+    try {
+      const res = await fetch(`http://localhost:3001/${endpoint}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(enriched),
+      });
+
+      if (!res.ok) throw new Error("Erreur lors de l'envoi");
+
+      const saved = await res.json();
+      setter((prev) => [saved, ...prev]);
+      handleCancel();
+    } catch (err) {
+      console.error("Échec de l'ajout :", err);
+      alert("Une erreur est survenue. Veuillez réessayer.");
+    }
+  };
 
   return (
     <div className="space-y-8">
@@ -36,32 +64,14 @@ export default function AddMenu({ setModels, setArtisans }) {
             <PublishForm
               mode="create"
               onCancel={handleCancel}
-              onSubmit={async (newModel) => {
-                const res = await fetch("http://localhost:3001/artworks", {
-                  method: "POST",
-                  headers: { "Content-Type": "application/json" },
-                  body: JSON.stringify(newModel),
-                });
-                const saved = await res.json();
-                setModels((prev) => [saved, ...prev]);
-                handleCancel();
-              }}
+              onSubmit={(data) => handleSubmit("modele", data)}
             />
           )}
 
           {selectedType === "artisan" && (
             <FormArtisan
               onCancel={handleCancel}
-              onSubmit={async (newArtisan) => {
-                const res = await fetch("http://localhost:3001/artisans", {
-                  method: "POST",
-                  headers: { "Content-Type": "application/json" },
-                  body: JSON.stringify(newArtisan),
-                });
-                const saved = await res.json();
-                setArtisans((prev) => [saved, ...prev]);
-                handleCancel();
-              }}
+              onSubmit={(data) => handleSubmit("artisan", data)}
             />
           )}
         </div>

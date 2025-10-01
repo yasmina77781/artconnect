@@ -23,12 +23,28 @@ export default function EditArtisanModal({ initialData, onClose, setArtisans }) 
     reader.onload = () => {
       setFormData((prev) => ({ ...prev, image: reader.result }));
     };
-    reader.readAsDataURL(file);
+    try {
+      reader.readAsDataURL(file);
+    } catch (err) {
+      console.error("Erreur de lecture d'image :", err);
+      alert("Impossible de lire cette image.");
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
+
+    if (
+      !formData.name.trim() ||
+      !formData.region.trim() ||
+      !formData.description.trim()
+    ) {
+      alert("Tous les champs doivent être remplis correctement.");
+      setIsSubmitting(false);
+      return;
+    }
+
     try {
       const res = await fetch(`http://localhost:3001/artisans/${formData.id}`, {
         method: "PUT",

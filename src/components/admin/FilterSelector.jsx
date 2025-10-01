@@ -1,12 +1,11 @@
 import { useMemo } from "react";
-import { Palette, Layers, CalendarDays, Users } from "lucide-react";
 
 export default function FilterSelector({ selected, setSelected }) {
   const options = useMemo(() => [
-    { value: "oeuvres", label: "Œuvres", icon: <Palette size={16} /> },
-    { value: "categories", label: "Catégories", icon: <Layers size={16} /> },
-    { value: "evenements", label: "Événements", icon: <CalendarDays size={16} /> },
-    { value: "artisans", label: "Artisans", icon: <Users size={16} /> },
+    { value: "oeuvres", label: "Œuvres" },
+    { value: "categories", label: "Catégories" },
+    { value: "evenements", label: "Événements" },
+    { value: "artisans", label: "Artisans" },
   ], []);
 
   return (

@@ -1,8 +1,21 @@
+import { useState } from "react";
 import { motion } from "framer-motion";
 import PublishForm from "../PublishForm";
 
 export default function EditModal({ initialData, onClose, setModels }) {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const handleSubmit = async (updatedModel) => {
+    if (
+      !updatedModel.title?.trim() ||
+      !updatedModel.region?.trim() ||
+      !updatedModel.description?.trim()
+    ) {
+      alert("Tous les champs doivent être remplis correctement.");
+      return;
+    }
+
+    setIsSubmitting(true);
     try {
       const res = await fetch(`http://localhost:3001/artworks/${updatedModel.id}`, {
         method: "PUT",
@@ -13,13 +26,13 @@ export default function EditModal({ initialData, onClose, setModels }) {
       if (!res.ok) throw new Error("Erreur lors de la mise à jour");
 
       const saved = await res.json();
-      setModels((prev) =>
-        prev.map((m) => (m.id === saved.id ? saved : m))
-      );
+      setModels((prev) => prev.map((m) => (m.id === saved.id ? saved : m)));
       onClose();
     } catch (error) {
       console.error("Update failed:", error);
       alert("Une erreur est survenue lors de la mise à jour.");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -44,6 +57,7 @@ export default function EditModal({ initialData, onClose, setModels }) {
           mode="edit"
           onSubmit={handleSubmit}
           onCancel={onClose}
+          isSubmitting={isSubmitting}
         />
       </motion.div>
     </motion.div>
